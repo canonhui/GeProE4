@@ -1,0 +1,89 @@
+{% extends "bootstrap/base.html" %}
+
+{% block head %}
+    {{ super() }}
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/main.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/myStyle.css') }}">
+    <!--prevent the browser to make a request for the favicon-->
+    <link rel="icon" href="data:;base64,=">
+    <title>{% block title %}
+        {% if title %}
+            {{ title }} - GeProE4
+        {% else %}
+            GeProE4
+        {% endif %}
+    {% endblock title %}</title>
+
+
+
+{% endblock %}
+
+{% block navbar %}
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/index">VacHeure!</a>
+    </div>
+    <div class="collapse navbar-collapse" id="navbar">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="/index">Home</a></li>
+        {% if session['user_id'] == null %}
+          <li id='login'><a href="/login">Login</a></li>
+        {% endif %}
+        {% if session["user_id"] != null %}
+          <li><a href="/liste_groupes">Liste des Groupes</a></li>
+          <li class="dropdown"><a href="/liste_projets" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Liste des Projets <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li><a href="/liste_projets/inscrit">Inscrit</a></li>
+              <li><a href="/liste_projets/resume">Résumé</a></li>
+            </ul>
+          </li>
+          
+          {% if current_user.get_role() == 77 %}
+            <li><a href="/admin">Admin</a></li>
+          {% endif %}
+          <li><a href="/logout">Logout</a></li>
+        {% endif %}
+      </ul>
+      {% if session["user_id"] != null %} 
+        <ul class="nav navbar-nav" style="float: right">
+          <li ><a href="#" class="navbar-nav pull-right"> {{ current_user.get_name() }} </a></li>
+        </ul>
+      {% endif %}
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+
+    {% for message in get_flashed_messages() %}
+    <div class="alert alert-warning">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{ message }}
+    </div>
+    {% endfor %}
+
+    {% block page_content %}{% endblock %}
+    {% block container %} {% endblock %}
+
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    <script src="{{ url_for('static',filename='JS/myJS.js') }}"></script>
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <script type="text/javascript">
+        
+    </script>
+{% endblock %}

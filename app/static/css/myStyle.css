@@ -1,0 +1,173 @@
+.container {
+  
+}
+
+/* historique.html or affiche_table.html */
+.affiche-div {
+  margin: 0 2% 0 2%;
+}
+.affiche-table {
+  width: 100%;
+  table-layout: fixed;
+}
+.oui {
+  color: green;
+}
+.non {
+  color: red;
+}
+.en_cours {
+  color: black;
+}
+.deja_finis {
+  color: grey;
+}
+#btn-pagination {
+  text-align: center;
+  margin-bottom: 30px;
+}
+.btn-success {
+  margin-bottom: 30px;
+}
+.btn-page {
+  width: 20px;
+  padding: 0 1px;
+}
+th {
+  cursor: pointer;
+  background-color: #d7d7d7;
+}
+th i {
+  margin-left: 20%;
+}
+#td_intitule {
+  white-space:nowrap; /*force to display in one line*/
+  overflow:hidden;
+  text-overflow:ellipsis; /*replace overflow content with ...*/
+  word-break:keep-all;
+  padding: 0 7px;
+}
+/********************************/
+
+/* consEns/dec.html */
+.hr-address {
+  color: #000;
+  margin-top: 0;
+  text-align: center;
+}
+.hr-address:after {
+  content: 'Adresse d\'entreprise';
+  display: inline-block;
+  position: relative;
+  top: -12px;
+  padding: 0 10px;
+  background-color: #fff;
+  color: #555;
+  font-size: 17px;
+  font-weight: bold;
+}
+.address-table tr {
+  height: 20px;
+}
+.address-table td {
+  vertical-align: baseline;
+}
+/*************************/
+
+/* admin.html */
+#form-admin {
+  margin-left: 7%;
+}
+#form-admin p {
+  padding-top: 7px;
+}
+#form-admin .admin-func {
+  font-size: 14px;
+  background-color: #fff;
+  border: 1px solid #aaa;
+  border-radius: 4px;
+  padding: 7px;
+
+}
+#form-admin .admin-func:hover {
+  background-color: #eee;
+}
+/***********************/
+
+/* accueil.html */
+#entry {
+	margin: 10%;
+	text-align: center;
+}
+#entry a {
+	color: #fff;
+}
+.btn-page {
+  color: #fff;
+  font-family: monospace;
+  background-color: #7c7;
+  height: 23px;
+  width: 27px;
+  padding: 0;
+  margin: 0 4px 0 4px;
+  overflow: auto;
+}
+/***********************/
+
+/*---------------------------
+ POP UP INSCRIPTION CONNECTION
+----------------------------*/
+.group-info { /* N'affiche pas les pop-ups*/
+    display: none;
+}
+.group-link:hover{
+    cursor:pointer;
+}
+
+/* Fond des pops-up d'inscription et de connection*/
+.fond{
+    position: absolute;
+    top: 0;
+    left:0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(10,10,10,0.65);
+    text-align: center;
+}
+.UI{
+    display: inline-block;
+    background: white;
+    padding: 30px;
+    border-radius: 5px;
+    margin-top: 30vh;
+}
+
+/*
+select {
+  margin: 50px;
+  border: 1px solid #111;
+  background: transparent;
+  width: 220px;
+  padding: 5px 35px 5px 5px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  height: 34px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background: url(http://www.stackoverflow.com/favicon.ico) 96% / 15% no-repeat #eee;
+}
+*/
+/* CAUTION: IE hackery ahead
+select::-ms-expand { 
+    display: none;  remove default arrow on ie10 and ie11 
+}
+ */
+/* target Internet Explorer 9 to undo the custom arrow 
+@media screen and (min-width:0\0) {
+    select {
+        background:none\9;
+        padding: 5px\9;
+    } 
+}
+*/

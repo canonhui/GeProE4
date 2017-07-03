@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+ 
+{% import "bootstrap/wtf.html" as wtf %}
+ 
+{% block container %}
+  <h2> Menu d'administration</h2>
+   
+   <br>
+
+   <form method="post" action="/admin/" enctype="multipart/form-data">
+       <input type="file" name="liste_etudiants" />
+       <input type="submit" value="Upload">
+   </form>
+   <form method="post" action="/admin/" enctype="multipart/form-data">
+       <input type="file" name="liste_projets" />
+       <input type="submit" value="Upload">	
+   </form>
+   <a href="{{ url_for('index') }}"> Cliquer ici pour revenir à "home" </a>
+
+{% endblock %}

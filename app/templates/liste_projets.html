@@ -1,0 +1,165 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{{ super() }}
+
+<div class="affiche-div">
+{% if msg %}
+	<h4>{{msg}}</h4>
+{% endif %}
+<form action="" method="post">
+	<table class="affiche-table table table-hover">
+		<tr>
+			<th>ID du projet</th>
+			<th>Titre du projet</th>
+			<th>Lien extérieur</th>
+			<th>Groupes inscrits</th>
+			<th>Complet</th>
+			{% if liste == 'inscrit' %}
+				{% if role == 1 %}
+					<th>Préférences</th>
+				{% else %}
+					<th>Affectation</th>
+				{% endif %}
+			{% else %}
+				<th>Groupe attribué</th>
+			{% endif %}
+		</tr>
+
+		{% for projet in projets.items %}
+		{% if liste == 'inscrit' and projet.groupe_attribue %}
+			<tr class="attribue">
+		{% else %}
+			<tr>
+		{% endif %}
+			<td>{{ projet.projet_id }}</td>
+			<td>{{ projet.titre }}</td>
+			<td><a href="{{ 'http://' + projet.lien }}" target="_blank">{{ projet.lien }}</a></td>
+			<td>
+				{% if projet.groupes_inscrits.first() %}
+					{% for gr in projet.groupes_inscrits.order_by('groupe_id asc').all() %}
+						<section class="group-info" id="projet-{{ projet.projet_id }}-groupe-{{ gr.groupe_id }}">
+							<div class="fond">
+								<div class="UI">
+									<b>Membres du groupe {{ gr.groupe_id }} :</b><br>
+									{% for u in User.query.filter_by(groupe_id=gr.groupe_id).all() %}
+										{{ u.nom + ' ' + u.prenom }}<br>
+									{% endfor %}
+								</div>
+							</div>
+						</section>
+						<sapn><a class="group-link" id="link-projet-{{ projet.projet_id }}-groupe-{{ gr.groupe_id }}">{{ gr.groupe_id }}</a></sapn>
+					{% endfor %}
+				{% else %}
+					Aucun groupe inscrit
+				{% endif %}
+			</td>
+			{% if liste == 'inscrit' and role == 1 %}
+				<td class="complet">
+			{% else %}
+				<td>
+			{% endif %}
+				{% if projet.groupes_inscrits.count() == max_groupe_ins %}
+					Complet
+				{% else %}
+					Non
+				{% endif %}
+			</td>
+			{% if liste == 'inscrit' %}
+				{% if role == 1 %}
+					<td>
+						<input type="radio" class="radio-{{ projet.projet_id }}" name="preference-1" value="{{ projet.projet_id }}-1"> 1
+						<input type="radio" class="radio-{{ projet.projet_id }}" name="preference-2" value="{{ projet.projet_id }}-2"> 2
+						<input type="radio" class="radio-{{ projet.projet_id }}" name="preference-3" value="{{ projet.projet_id }}-3"> 3
+					</td>
+				{% else %}
+					<td>
+						<select name="{{ projet.projet_id }}" class="form-control validate">
+							{% if projet.groupe_attribue %}
+								<option selected="selected" disabled="disabled">{{ projet.groupe_attribue }}</option>
+							{% else %}
+								<option value=0></option>
+								{% if projet.groupes_inscrits.first() %}
+									{% for gr in projet.groupes_inscrits.order_by('groupe_id asc').all() %}
+									{% if gr.groupe_id not in groupes_attribues %}
+										<option value='{{ gr.groupe_id }}'>
+											{{ gr.groupe_id }}
+										</option>
+									{% endif %}
+									{% endfor %}
+								{% endif %}
+							{% endif %}
+						</select>
+					</td>
+				{% endif %}
+			{% else %}
+				<td>{% if projet.groupe_attribue %}{{ projet.groupe_attribue }}{% else %}{% endif %}</td>
+			{% endif %}
+		</tr>
+		{% endfor %}
+	</table>
+	<input class="btn btn-success btn-sm" type="submit" value="Envoyer" />
+    </form>
+</form>
+
+
+<div id='btn-pagination'>
+
+{% if projets.has_prev %}
+	<button class="btn btn-page" id="page-1">Première</button>
+	<button class="btn btn-page" id="page-{{ projets.prev_num }}">&lt;&lt; </button>
+	
+{% else %}
+    Première &lt;&lt; 
+{% endif %}
+
+{% for i in range(1, page_max + 1) %}
+	<button class="btn btn-page" id="page-{{ i }}">{{ i }}</button>
+{% endfor %}
+
+{% if projets.has_next %}
+	<button class="btn btn-page" id="page-{{ projets.next_num }}">&gt;&gt; </button>
+	<button class="btn btn-page" id="page-{{ page_max }}">Dernière</button>
+	
+{% else %}
+     &gt;&gt; Dernière
+{% endif %}
+
+
+</div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+
+<script type="text/javascript">
+	$(document).on('click', '#btn-pagination button', function() {
+		page_ajax = $(this).attr('id').split('page-')[1];
+		$.ajax({
+			url: "{{ url_for('main_bp.liste_projets') }}",
+			data: {page: page_ajax},
+			type: 'GET',
+			success: function(response) {
+				$('table').html( $('<table>').html(response).find('table') );
+			}
+		})
+	});
+	var radio_state;
+	$(document).on('click', 'input[type=radio]', function() {
+		
+		if(radio_state === this) {
+			this.checked = false;
+			radio_state = null;
+		} else {
+			radio_state = this;
+			radio_class = $(this).attr('class');
+			$('.' + radio_class).prop('checked', false);
+			$(this).prop('checked', true);
+		}
+	});
+
+</script>
+
+{% endblock %}
